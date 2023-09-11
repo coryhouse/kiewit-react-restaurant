@@ -3,7 +3,7 @@ import { Food, FoodTag, foodTags } from "./foods.types";
 import { Heading } from "./shared/Heading";
 import { getFoods } from "./api/foods.service";
 
-export function App() {
+export function Menu() {
   const [tagFilter, setTagFilter] = useState<null | FoodTag>(null);
   const [foods, setFoods] = useState<Food[]>([]);
 
