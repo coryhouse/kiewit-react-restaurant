@@ -1,4 +1,5 @@
 import { Food, foods } from "./foods";
+import { Heading } from "./shared/Heading";
 
 export function App() {
   function renderFood(food: Food) {
@@ -7,7 +8,7 @@ export function App() {
         key={food.id}
         className="p-2 m-2 bg-cyan-100 w-80 border rounded shadow-md"
       >
-        <h2 className="text-xl font-bold">{food.name}</h2>
+        <Heading tag="h2">{food.name}</Heading>
         <p>{food.description}</p>
         <p className="font-bold">${food.price}</p>
       </div>
@@ -16,7 +17,7 @@ export function App() {
 
   return (
     <>
-      <h1>Menu</h1>
+      <Heading tag="h1">Menu</Heading>
       <div className="flex flex-wrap">{foods.map(renderFood)}</div>
     </>
   );
