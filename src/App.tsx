@@ -5,6 +5,10 @@ import { Heading } from "./shared/Heading";
 export function App() {
   const [tagFilter, setTagFilter] = useState<null | FoodTag>(null);
 
+  const filteredFoods = foods.filter((food) => {
+    return tagFilter ? food.tags.includes(tagFilter) : true;
+  });
+
   function renderFood(food: Food) {
     return (
       <div
@@ -38,7 +42,12 @@ export function App() {
           <option key={tag}>{tag}</option>
         ))}
       </select>
-      <div className="flex flex-wrap">{foods.map(renderFood)}</div>
+      {tagFilter && (
+        <p>
+          {filteredFoods.length} food{filteredFoods.length > 1 && "s"} found.
+        </p>
+      )}
+      <div className="flex flex-wrap">{filteredFoods.map(renderFood)}</div>
     </>
   );
 }
