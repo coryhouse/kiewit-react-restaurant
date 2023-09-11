@@ -1,7 +1,10 @@
-import { Food, foods } from "./foods";
+import { useState } from "react";
+import { Food, FoodTag, foodTags, foods } from "./foods";
 import { Heading } from "./shared/Heading";
 
 export function App() {
+  const [tagFilter, setTagFilter] = useState<null | FoodTag>(null);
+
   function renderFood(food: Food) {
     return (
       <div
@@ -23,6 +26,18 @@ export function App() {
   return (
     <>
       <Heading tag="h1">Menu</Heading>
+      <label htmlFor="tag-filter">Filter by Tag</label>
+      <br />
+      <select
+        value={tagFilter ?? ""}
+        id="tag-filter"
+        onChange={(e) => setTagFilter(e.target.value as FoodTag)}
+      >
+        <option value="">All</option>
+        {foodTags.map((tag) => (
+          <option key={tag}>{tag}</option>
+        ))}
+      </select>
       <div className="flex flex-wrap">{foods.map(renderFood)}</div>
     </>
   );
