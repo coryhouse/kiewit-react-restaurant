@@ -1,9 +1,19 @@
-import { useState } from "react";
-import { Food, FoodTag, foodTags, foods } from "./foods";
+import { useEffect, useState } from "react";
+import { Food, FoodTag, foodTags } from "./foods.types";
 import { Heading } from "./shared/Heading";
+import { getFoods } from "./api/foods.service";
 
 export function App() {
   const [tagFilter, setTagFilter] = useState<null | FoodTag>(null);
+  const [foods, setFoods] = useState<Food[]>([]);
+
+  useEffect(() => {
+    async function fetchFoods() {
+      const getFoodsResp = await getFoods();
+      setFoods(getFoodsResp);
+    }
+    fetchFoods();
+  }, []);
 
   const filteredFoods = foods.filter((food) => {
     return tagFilter ? food.tags.includes(tagFilter) : true;
