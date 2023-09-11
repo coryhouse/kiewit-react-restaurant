@@ -9,6 +9,11 @@ export function App() {
         className="p-2 m-2 bg-cyan-100 w-80 border rounded shadow-md"
       >
         <Heading tag="h2">{food.name}</Heading>
+        <img
+          src={`images/${food.image}`}
+          alt={food.name}
+          className="max-h-36"
+        />
         <p>{food.description}</p>
         <p className="font-bold">${food.price}</p>
       </div>
