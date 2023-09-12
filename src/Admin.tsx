@@ -4,6 +4,7 @@ import { NewFood } from "./foods.types";
 import { Input } from "./shared/Input";
 import { addFood } from "./api/foods.service";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const newFood: NewFood = {
   name: "",
@@ -15,6 +16,8 @@ const newFood: NewFood = {
 
 export function Admin() {
   const [food, setFood] = useState(newFood);
+
+  const navigate = useNavigate();
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     setFood((prevFood) => {
@@ -35,6 +38,7 @@ export function Admin() {
         e.preventDefault();
         await addFood(food);
         toast.success("Food added!");
+        navigate("/");
       }}
     >
       <Heading tag="h1">Admin</Heading>
