@@ -3,8 +3,20 @@
 @tailwind utilities;
 
 @layer base {
+  main {
+    @apply p-4;
+  }
+
   a {
     text-decoration: underline;
     color: blue;
+  }
+
+  input {
+    @apply border border-gray-300 rounded-md shadow-sm;
+  }
+
+  input[type="button"] {
+    @apply py-2 px-4 text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700;
   }
 }
