@@ -1,5 +1,22 @@
 # React + TypeScript + Vite
 
+## TODO
+
+0. Navigation
+1. Delete a food
+2. Forms: Add a food
+3. Forms: Edit a food
+4. Search foods
+5. Loading state
+6. Context
+7. Error handling
+8. Automated testing
+9. Mocking API calls
+10. Storybook (documenting reusable components/dev in isolation)
+11. 404s
+12. React Query
+13. 301s
+
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:
