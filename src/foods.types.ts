@@ -25,3 +25,5 @@ export const foodSchema = z.object({
 
 export type Food = z.infer<typeof foodSchema>;
 export type FoodTag = z.infer<typeof foodTagsSchema>;
+
+export type NewFood = Omit<Food, "id">;

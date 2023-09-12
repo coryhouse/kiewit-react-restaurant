@@ -1,20 +1,54 @@
+import { useState } from "react";
 import { Heading } from "./shared/Heading";
+import { NewFood } from "./foods.types";
+import { Input } from "./shared/Input";
+
+const newFood: NewFood = {
+  name: "",
+  description: "",
+  image: "",
+  price: 0,
+  tags: [],
+};
 
 export function Admin() {
+  const [food, setFood] = useState(newFood);
+
+  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setFood((prevFood) => {
+      return {
+        ...prevFood,
+        // Use the computed property syntax to set the property
+        [event.target.id]: event.target.value,
+      };
+    });
+  }
+
   return (
-    <form>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+      }}
+    >
       <Heading tag="h1">Admin</Heading>
-      <label className="block" htmlFor="name">
-        Name
-      </label>
-      <input className="mb-2" id="name" type="text" />
+      <Input label="Name" id="name" value={food.name} onChange={handleChange} />
 
-      <label className="block" htmlFor="description">
-        Description
-      </label>
-      <input className="mb-2" id="description" type="text" />
+      <Input
+        label="Description"
+        id="description"
+        value={food.description}
+        onChange={handleChange}
+      />
 
-      <input className="block" type="button" value="Add Food" />
+      <Input
+        label="Price"
+        id="price"
+        type="number"
+        value={food.price.toString()}
+        onChange={handleChange}
+      />
+
+      <input className="block" type="submit" value="Add Food" />
     </form>
   );
 }
