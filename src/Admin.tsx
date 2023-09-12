@@ -5,6 +5,7 @@ import { Input } from "./shared/Input";
 import { addFood } from "./api/foods.service";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { z } from "zod";
 
 const newFood: NewFood = {
   name: "",
@@ -13,6 +14,14 @@ const newFood: NewFood = {
   price: 0,
   tags: [],
 };
+
+const foodFormSchema = z.object({
+  name: z.string().max(50),
+  description: z.string().min(2).max(50),
+  image: z.string(),
+  price: z.number().min(1).max(100),
+  tags: z.array(z.string()),
+});
 
 export function Admin() {
   const [food, setFood] = useState(newFood);
@@ -32,15 +41,21 @@ export function Admin() {
     });
   }
 
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    // validate input via zod
+    const result = foodFormSchema.safeParse(food);
+    if (!result.success) {
+      toast.error("Invalid input");
+      return;
+    }
+    await addFood(food);
+    toast.success("Food added!");
+    navigate("/");
+  }
+
   return (
-    <form
-      onSubmit={async (e) => {
-        e.preventDefault();
-        await addFood(food);
-        toast.success("Food added!");
-        navigate("/");
-      }}
-    >
+    <form onSubmit={handleSubmit}>
       <Heading tag="h1">Admin</Heading>
       <Input label="Name" id="name" value={food.name} onChange={handleChange} />
 
