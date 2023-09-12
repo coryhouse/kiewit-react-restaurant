@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Heading } from "./shared/Heading";
 import { NewFood } from "./foods.types";
 import { Input } from "./shared/Input";
+import { addFood } from "./api/foods.service";
+import toast from "react-hot-toast";
 
 const newFood: NewFood = {
   name: "",
@@ -19,15 +21,20 @@ export function Admin() {
       return {
         ...prevFood,
         // Use the computed property syntax to set the property
-        [event.target.id]: event.target.value,
+        [event.target.id]:
+          event.target.id === "price"
+            ? parseInt(event.target.value, 10)
+            : event.target.value,
       };
     });
   }
 
   return (
     <form
-      onSubmit={(e) => {
+      onSubmit={async (e) => {
         e.preventDefault();
+        await addFood(food);
+        toast.success("Food added!");
       }}
     >
       <Heading tag="h1">Admin</Heading>
@@ -44,7 +51,7 @@ export function Admin() {
         label="Price"
         id="price"
         type="number"
-        value={food.price.toString()}
+        value={food.price}
         onChange={handleChange}
       />
 

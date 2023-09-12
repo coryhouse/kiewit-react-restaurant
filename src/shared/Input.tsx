@@ -1,7 +1,7 @@
 type InputProps = {
   id: string;
   label: string;
-  value: string;
+  value: string | number;
   type?: "text" | "number" | "password" | "email";
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
