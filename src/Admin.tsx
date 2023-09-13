@@ -7,6 +7,18 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 
+type Touched = {
+  name: boolean;
+  description: boolean;
+  price: boolean;
+};
+
+const initialTouched: Touched = {
+  name: false,
+  description: false,
+  price: false,
+};
+
 const newFood: NewFood = {
   name: "",
   description: "",
@@ -16,7 +28,7 @@ const newFood: NewFood = {
 };
 
 const foodFormSchema = z.object({
-  name: z.string().max(50),
+  name: z.string().min(1).max(50),
   description: z.string().min(2).max(50),
   image: z.string(),
   price: z.number().min(1).max(100),
@@ -25,8 +37,25 @@ const foodFormSchema = z.object({
 
 export function Admin() {
   const [food, setFood] = useState(newFood);
+  const [touched, setTouched] = useState(initialTouched);
 
   const navigate = useNavigate();
+
+  // Validate the form on every render (every keystroke)
+  const result = foodFormSchema.safeParse(food);
+  const isError = !result.success;
+
+  const descriptionError = getFieldError("description");
+
+  function getFieldError(field: string) {
+    return (
+      !result.success &&
+      result.error.issues.find(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (issue: any) => issue.path[0] === field
+      )?.message
+    );
+  }
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     setFood((prevFood) => {
@@ -44,7 +73,6 @@ export function Admin() {
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     // validate input via zod
-    const result = foodFormSchema.safeParse(food);
     if (!result.success) {
       toast.error("Invalid input");
       return;
@@ -57,13 +85,24 @@ export function Admin() {
   return (
     <form onSubmit={handleSubmit}>
       <Heading tag="h1">Admin</Heading>
-      <Input label="Name" id="name" value={food.name} onChange={handleChange} />
+      <Input
+        label="Name"
+        id="name"
+        value={food.name}
+        onChange={handleChange}
+        error={getFieldError("name")}
+        touched={touched.name}
+        onBlur={() => setTouched((prev) => ({ ...prev, name: true }))}
+      />
 
       <Input
         label="Description"
         id="description"
         value={food.description}
         onChange={handleChange}
+        error={getFieldError("description")}
+        touched={touched.description}
+        onBlur={() => setTouched((prev) => ({ ...prev, description: true }))}
       />
 
       <Input
@@ -72,6 +111,9 @@ export function Admin() {
         type="number"
         value={food.price}
         onChange={handleChange}
+        error={getFieldError("price")}
+        touched={touched.price}
+        onBlur={() => setTouched((prev) => ({ ...prev, price: true }))}
       />
 
       <input className="block" type="submit" value="Add Food" />
