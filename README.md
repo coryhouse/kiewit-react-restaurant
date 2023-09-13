@@ -2,9 +2,8 @@
 
 ## TODO
 
-0. Navigation
-1. Delete a food
-2. Forms: Add a food
+1. Forms: Add a food
+2. Delete a food
 3. Forms: Edit a food
 4. Save tags via a checkbox list
 5. Search foods
