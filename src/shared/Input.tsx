@@ -7,6 +7,7 @@ type InputProps = {
   type?: "text" | "number" | "password" | "email";
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   error: string | false | undefined;
+  formIsSubmitted: boolean;
 };
 
 export function Input({
@@ -16,6 +17,7 @@ export function Input({
   onChange,
   type = "text",
   error,
+  formIsSubmitted,
 }: InputProps) {
   const [touched, setTouched] = useState(false);
 
@@ -32,7 +34,9 @@ export function Input({
         onChange={onChange}
         onBlur={() => setTouched(true)}
       />
-      {error && touched && <p className="text-red-500">{error}</p>}
+      {error && (touched || formIsSubmitted) && (
+        <p className="text-red-500">{error}</p>
+      )}
     </>
   );
 }

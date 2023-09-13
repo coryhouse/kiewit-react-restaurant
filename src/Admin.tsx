@@ -23,8 +23,11 @@ const foodFormSchema = z.object({
   tags: z.array(z.string()),
 });
 
+type Status = "idle" | "submitting" | "submitted";
+
 export function Admin() {
   const [food, setFood] = useState(newFood);
+  const [status, setStatus] = useState<Status>("idle");
 
   const navigate = useNavigate();
 
@@ -56,8 +59,10 @@ export function Admin() {
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    setStatus("submitting");
     // validate input via zod
     if (!result.success) {
+      setStatus("submitted");
       toast.error("Invalid input");
       return;
     }
@@ -65,6 +70,8 @@ export function Admin() {
     toast.success("Food added!");
     navigate("/");
   }
+
+  const formIsSubmitted = status === "submitted";
 
   return (
     <form onSubmit={handleSubmit}>
@@ -75,6 +82,7 @@ export function Admin() {
         value={food.name}
         onChange={handleChange}
         error={getFieldError("name")}
+        formIsSubmitted={formIsSubmitted}
       />
 
       <Input
@@ -83,6 +91,7 @@ export function Admin() {
         value={food.description}
         onChange={handleChange}
         error={getFieldError("description")}
+        formIsSubmitted={formIsSubmitted}
       />
 
       <Input
@@ -92,6 +101,7 @@ export function Admin() {
         value={food.price}
         onChange={handleChange}
         error={getFieldError("price")}
+        formIsSubmitted={formIsSubmitted}
       />
 
       <input className="block" type="submit" value="Add Food" />
