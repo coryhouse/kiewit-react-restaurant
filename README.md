@@ -7,7 +7,7 @@
 3. Save tags via a checkbox list
 4. Search foods
 5. Loading state
-6. Context
+6. Context - (Eliminate formIsSubmitted)
 7. Error handling
 8. Automated testing
 9. Mocking API calls
