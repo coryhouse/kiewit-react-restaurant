@@ -7,18 +7,6 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 
-type Touched = {
-  name: boolean;
-  description: boolean;
-  price: boolean;
-};
-
-const initialTouched: Touched = {
-  name: false,
-  description: false,
-  price: false,
-};
-
 const newFood: NewFood = {
   name: "",
   description: "",
@@ -37,15 +25,11 @@ const foodFormSchema = z.object({
 
 export function Admin() {
   const [food, setFood] = useState(newFood);
-  const [touched, setTouched] = useState(initialTouched);
 
   const navigate = useNavigate();
 
   // Validate the form on every render (every keystroke)
   const result = foodFormSchema.safeParse(food);
-  const isError = !result.success;
-
-  const descriptionError = getFieldError("description");
 
   function getFieldError(field: string) {
     return (
@@ -91,8 +75,6 @@ export function Admin() {
         value={food.name}
         onChange={handleChange}
         error={getFieldError("name")}
-        touched={touched.name}
-        onBlur={() => setTouched((prev) => ({ ...prev, name: true }))}
       />
 
       <Input
@@ -101,8 +83,6 @@ export function Admin() {
         value={food.description}
         onChange={handleChange}
         error={getFieldError("description")}
-        touched={touched.description}
-        onBlur={() => setTouched((prev) => ({ ...prev, description: true }))}
       />
 
       <Input
@@ -112,8 +92,6 @@ export function Admin() {
         value={food.price}
         onChange={handleChange}
         error={getFieldError("price")}
-        touched={touched.price}
-        onBlur={() => setTouched((prev) => ({ ...prev, price: true }))}
       />
 
       <input className="block" type="submit" value="Add Food" />

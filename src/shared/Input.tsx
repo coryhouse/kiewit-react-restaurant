@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 type InputProps = {
   id: string;
   label: string;
@@ -5,8 +7,6 @@ type InputProps = {
   type?: "text" | "number" | "password" | "email";
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   error: string | false | undefined;
-  onBlur: () => void;
-  touched: boolean;
 };
 
 export function Input({
@@ -16,9 +16,9 @@ export function Input({
   onChange,
   type = "text",
   error,
-  onBlur,
-  touched,
 }: InputProps) {
+  const [touched, setTouched] = useState(false);
+
   return (
     <>
       <label className="block" htmlFor={id}>
@@ -30,7 +30,7 @@ export function Input({
         type={type}
         value={value}
         onChange={onChange}
-        onBlur={() => onBlur()}
+        onBlur={() => setTouched(true)}
       />
       {error && touched && <p className="text-red-500">{error}</p>}
     </>
