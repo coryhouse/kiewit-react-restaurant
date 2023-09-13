@@ -13,11 +13,12 @@
   }
 
   input {
-    @apply border border-gray-300 rounded-md shadow-sm p-2;
+    @apply p-2 border border-gray-300 rounded-md shadow-sm;
   }
 
   input[type="button"],
-  input[type="submit"] {
-    @apply py-2 px-4 text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700;
+  input[type="submit"],
+  button {
+    @apply px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700;
   }
 }

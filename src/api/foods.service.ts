@@ -16,3 +16,7 @@ export async function addFood(newFood: NewFood): Promise<Food> {
     .json();
   return food as Food;
 }
+
+export async function deleteFood(foodId: number): Promise<void> {
+  await ky.delete("http://localhost:3001/foods/" + foodId);
+}
