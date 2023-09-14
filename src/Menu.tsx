@@ -44,7 +44,12 @@ export function Menu() {
         />
         <p>{food.description}</p>
         <p className="font-bold">${food.price}</p>
-        <button onClick={() => handleDelete(food)}>Delete</button>
+        <button
+          aria-label={`Delete ${food.name}`}
+          onClick={() => handleDelete(food)}
+        >
+          Delete
+        </button>
       </div>
     );
   }
