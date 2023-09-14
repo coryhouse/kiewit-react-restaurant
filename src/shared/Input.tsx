@@ -35,7 +35,9 @@ export function Input({
         onBlur={() => setTouched(true)}
       />
       {error && (touched || formIsSubmitted) && (
-        <p className="text-red-500">{error}</p>
+        <p role="alert" className="text-red-500">
+          {error}
+        </p>
       )}
     </>
   );
