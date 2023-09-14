@@ -3,6 +3,7 @@ import { Food, FoodTag, foodTags } from "./foods.types";
 import { Heading } from "./shared/Heading";
 import { deleteFood, getFoods } from "./api/foods.service";
 import toast from "react-hot-toast";
+import { Link } from "react-router-dom";
 
 export function Menu() {
   const [tagFilter, setTagFilter] = useState<null | FoodTag>(null);
@@ -36,7 +37,9 @@ export function Menu() {
         key={food.id}
         className="p-2 m-2 border rounded shadow-md bg-cyan-100 w-80"
       >
-        <Heading tag="h2">{food.name}</Heading>
+        <Heading tag="h2">
+          <Link to={`/admin/${food.id}`}> {food.name}</Link>
+        </Heading>
         <img
           src={`images/${food.image}`}
           alt={food.name}
