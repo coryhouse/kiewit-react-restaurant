@@ -2,19 +2,17 @@
 
 ## TODO
 
-1. Forms: Edit a food
-2. Save tags via a checkbox list
-3. Search foods
-4. Loading state
-5. Context - (Eliminate formIsSubmitted)
-6. Error handling
-7. Automated testing
-8. Mocking API calls
-9. Storybook (documenting reusable components/dev in isolation)
-10. 404s
-11. React Query
-12. 301s
-13. Next.js and React Server Components
+1. React Query
+2. Search foods
+3. Context - (Eliminate formIsSubmitted)
+4. Error handling
+5. Automated unit testing
+6. Save tags via a checkbox list
+7. Mocking API calls
+8. Storybook (documenting reusable components/dev in isolation)
+9. 404s
+10. 301s
+11. Next.js and React Server Components
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
