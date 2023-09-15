@@ -49,6 +49,9 @@ function testDeletingAFood() {
 function testEditingAFood() {
   cy.findByRole("link", { name: testFood.name }).click();
 
+  // Loading spinner should show while we wait for the fetch call
+  cy.findByRole("status");
+
   // First, assure the form is populated with the info for the food we just clicked on.
   cy.findByLabelText("Name").should("have.value", testFood.name);
   cy.findByLabelText("Description").should("have.value", testFood.description);

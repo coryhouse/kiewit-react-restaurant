@@ -4,15 +4,18 @@ import { Heading } from "./shared/Heading";
 import { deleteFood, getFoods } from "./api/foods.service";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
+import { Spinner } from "./shared/Spinner";
 
 export function Menu() {
   const [tagFilter, setTagFilter] = useState<null | FoodTag>(null);
   const [foods, setFoods] = useState<Food[]>([]);
+  const [isLoadingFoods, setIsLoadingFoods] = useState(true);
 
   useEffect(() => {
     async function fetchFoods() {
       const getFoodsResp = await getFoods();
       setFoods(getFoodsResp);
+      setIsLoadingFoods(false);
     }
     fetchFoods();
   }, []);
@@ -55,6 +58,10 @@ export function Menu() {
         </button>
       </div>
     );
+  }
+
+  if (isLoadingFoods) {
+    return <Spinner />;
   }
 
   return (

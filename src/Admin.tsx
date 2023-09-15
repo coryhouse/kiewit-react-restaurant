@@ -6,6 +6,7 @@ import { addFood, editFood, getFood } from "./api/foods.service";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import { z } from "zod";
+import { Spinner } from "./shared/Spinner";
 
 const newFood: NewFood = {
   name: "",
@@ -26,14 +27,14 @@ const foodFormSchema = z.object({
 type Status = "idle" | "submitting" | "submitted";
 
 export function Admin() {
-  const [food, setFood] = useState<NewFood | Food>(newFood);
-  const [status, setStatus] = useState<Status>("idle");
-
   const navigate = useNavigate();
   const { foodId } = useParams();
-
   // Derive state
   const isEditing = Boolean(foodId);
+
+  const [food, setFood] = useState<NewFood | Food>(newFood);
+  const [status, setStatus] = useState<Status>("idle");
+  const [isLoadingFood, setIsLoadingFood] = useState(isEditing);
 
   useEffect(() => {
     async function fetchFood() {
@@ -41,6 +42,7 @@ export function Admin() {
       // TODO: Use Zod to validate the foodId is a number
       const foodResponse = await getFood(Number(foodId));
       setFood(foodResponse);
+      setIsLoadingFood(false);
     }
 
     fetchFood();
@@ -89,44 +91,49 @@ export function Admin() {
     navigate("/");
   }
 
+  function renderForm() {
+    return (
+      <form onSubmit={handleSubmit}>
+        <Input
+          label="Name"
+          id="name"
+          value={food.name}
+          onChange={handleChange}
+          error={getFieldError("name")}
+          formIsSubmitted={formIsSubmitted}
+        />
+        <Input
+          label="Description"
+          id="description"
+          value={food.description}
+          onChange={handleChange}
+          error={getFieldError("description")}
+          formIsSubmitted={formIsSubmitted}
+        />
+        <Input
+          label="Price"
+          id="price"
+          type="number"
+          value={food.price}
+          onChange={handleChange}
+          error={getFieldError("price")}
+          formIsSubmitted={formIsSubmitted}
+        />
+        <input
+          className="block"
+          type="submit"
+          value={`${isEditing ? "Save" : "Add"} Food`}
+        />
+      </form>
+    );
+  }
+
   const formIsSubmitted = status === "submitted";
 
   return (
-    <form onSubmit={handleSubmit}>
+    <>
       <Heading tag="h1">Admin</Heading>
-      <Input
-        label="Name"
-        id="name"
-        value={food.name}
-        onChange={handleChange}
-        error={getFieldError("name")}
-        formIsSubmitted={formIsSubmitted}
-      />
-
-      <Input
-        label="Description"
-        id="description"
-        value={food.description}
-        onChange={handleChange}
-        error={getFieldError("description")}
-        formIsSubmitted={formIsSubmitted}
-      />
-
-      <Input
-        label="Price"
-        id="price"
-        type="number"
-        value={food.price}
-        onChange={handleChange}
-        error={getFieldError("price")}
-        formIsSubmitted={formIsSubmitted}
-      />
-
-      <input
-        className="block"
-        type="submit"
-        value={`${isEditing ? "Save" : "Add"} Food`}
-      />
-    </form>
+      {isLoadingFood ? <Spinner /> : renderForm()}
+    </>
   );
 }
