@@ -1,3 +1,15 @@
+const testFood = {
+  name: "New Food",
+  description: "New Description",
+  price: 10,
+};
+
+const editedFood = {
+  name: "New Food2",
+  description: "New Description2",
+  price: 2,
+};
+
 function clickAddFood() {
   cy.findByRole("button", { name: "Add Food" }).click();
 }
@@ -12,31 +24,47 @@ function testValidation() {
 }
 
 function testAddingAFood() {
-  cy.findByLabelText("Name").type("New Food");
-  cy.findByLabelText("Description").type("New Description");
-  cy.findByLabelText("Price").type("10");
+  cy.findByLabelText("Name").type(testFood.name);
+  cy.findByLabelText("Description").type(testFood.description);
+  cy.findByLabelText("Price").type(testFood.price.toString());
   clickAddFood();
 
   // Upon save, we should be on the menu page. Assure the URL is correct.
   cy.url().should("eq", "http://localhost:3000/");
 
   // The new food should be visible on the menu page.
-  cy.findByRole("heading", { name: "New Food" });
+  cy.findByRole("heading", { name: testFood.name }).should("exist");
 }
 
 function testDeletingAFood() {
-  cy.findByRole("button", { name: "Delete New Food" }).click();
+  cy.findByRole("button", { name: `Delete ${editedFood.name}` }).click();
 
   // now the new food should be gone
-  cy.findByRole("heading", { name: "New Food" }).should("not.exist");
+  cy.findByRole("heading", { name: editedFood.name }).should("not.exist");
 
   // Toast should display a confirmation of the delete.
-  cy.findByText("New Food deleted.");
+  cy.findByText(`${editedFood.name} deleted.`);
 }
 
 function testEditingAFood() {
-  cy.findByRole("link", { name: "New Food" }).click();
-  cy.findByLabelText("Name").should("have.value", "New Food");
+  cy.findByRole("link", { name: testFood.name }).click();
+
+  // First, assure the form is populated with the info for the food we just clicked on.
+  cy.findByLabelText("Name").should("have.value", testFood.name);
+  cy.findByLabelText("Description").should("have.value", testFood.description);
+  cy.findByLabelText("Price").should("have.value", testFood.price);
+
+  // Now, change the name and submit the form.
+  cy.findByLabelText("Name").type(editedFood.name);
+  cy.findByLabelText("Description").type(editedFood.description);
+  cy.findByLabelText("Price").type(editedFood.price.toString());
+  cy.findByRole("button", { name: "Save Food" }).click();
+
+  // Upon save, we should be on the menu page. Assure the URL is correct.
+  cy.url().should("eq", "http://localhost:3000/");
+
+  // The new food should be visible on the menu page.
+  cy.findByRole("heading", { name: editedFood.name }).should("exist");
 }
 
 it("should support adding, editing, and deleting a food", () => {
