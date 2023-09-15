@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import { z } from "zod";
 import { Spinner } from "./shared/Spinner";
+import { FormProvider } from "./FormContext";
 
 const newFood: NewFood = {
   name: "",
@@ -35,14 +36,20 @@ export function Admin() {
   const [food, setFood] = useState<NewFood | Food>(newFood);
   const [status, setStatus] = useState<Status>("idle");
   const [isLoadingFood, setIsLoadingFood] = useState(isEditing);
+  const [loadingFoodError, setLoadingFoodError] = useState<Error | null>(null);
 
   useEffect(() => {
     async function fetchFood() {
       if (!foodId) return;
       // TODO: Use Zod to validate the foodId is a number
-      const foodResponse = await getFood(Number(foodId));
-      setFood(foodResponse);
-      setIsLoadingFood(false);
+      try {
+        const foodResponse = await getFood(Number(foodId));
+        setFood(foodResponse);
+        setIsLoadingFood(false);
+      } catch (error) {
+        // TODO: Safely inspect the error to assure it's the type we expect
+        setLoadingFoodError(error as Error);
+      }
     }
 
     fetchFood();
@@ -95,43 +102,44 @@ export function Admin() {
   function renderForm() {
     return (
       <form onSubmit={handleSubmit}>
-        <Input
-          label="Name"
-          id="name"
-          value={food.name}
+        <FormProvider
+          formIsSubmitted={status === "submitted"}
           onChange={handleChange}
-          error={getFieldError("name")}
-          formIsSubmitted={formIsSubmitted}
-        />
-        <Input
-          label="Description"
-          id="description"
-          value={food.description}
-          onChange={handleChange}
-          error={getFieldError("description")}
-          formIsSubmitted={formIsSubmitted}
-        />
-        <Input
-          label="Price"
-          id="price"
-          type="number"
-          value={food.price}
-          onChange={handleChange}
-          error={getFieldError("price")}
-          formIsSubmitted={formIsSubmitted}
-        />
-        <input
-          className="block"
-          type="submit"
-          aria-disabled={!result.success}
-          value={`${isEditing ? "Save" : "Add"} Food`}
-        />{" "}
-        {status === "submitting" && <Spinner />}
+        >
+          <Input
+            label="Name"
+            id="name"
+            value={food.name}
+            error={getFieldError("name")}
+          />
+          <Input
+            label="Description"
+            id="description"
+            value={food.description}
+            error={getFieldError("description")}
+          />
+          <Input
+            label="Price"
+            id="price"
+            type="number"
+            value={food.price}
+            error={getFieldError("price")}
+          />
+          <input
+            className="block"
+            type="submit"
+            aria-disabled={!result.success}
+            value={`${isEditing ? "Save" : "Add"} Food`}
+          />{" "}
+          {status === "submitting" && <Spinner />}
+        </FormProvider>
       </form>
     );
   }
 
   const formIsSubmitted = status === "submitted";
+
+  if (loadingFoodError) throw new Error(loadingFoodError.message);
 
   return (
     <>

@@ -1,25 +1,17 @@
 import { useState } from "react";
+import { useFormContext } from "../FormContext";
 
 type InputProps = {
   id: string;
   label: string;
   value: string | number;
   type?: "text" | "number" | "password" | "email";
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   error: string | false | undefined;
-  formIsSubmitted: boolean;
 };
 
-export function Input({
-  id,
-  label,
-  value,
-  onChange,
-  type = "text",
-  error,
-  formIsSubmitted,
-}: InputProps) {
+export function Input({ id, label, value, type = "text", error }: InputProps) {
   const [touched, setTouched] = useState(false);
+  const { formIsSubmitted, onChange } = useFormContext();
 
   return (
     <>
