@@ -76,6 +76,7 @@ export function Admin() {
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (status === "submitting") return; // Don't allow multiple submits
     setStatus("submitting");
     // validate input via zod
     if (!result.success) {
@@ -122,8 +123,10 @@ export function Admin() {
         <input
           className="block"
           type="submit"
+          aria-disabled={!result.success}
           value={`${isEditing ? "Save" : "Add"} Food`}
-        />
+        />{" "}
+        {status === "submitting" && <Spinner />}
       </form>
     );
   }
