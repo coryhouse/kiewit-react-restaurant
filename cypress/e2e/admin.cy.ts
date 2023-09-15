@@ -55,9 +55,9 @@ function testEditingAFood() {
   cy.findByLabelText("Price").should("have.value", testFood.price);
 
   // Now, change the name and submit the form.
-  cy.findByLabelText("Name").type(editedFood.name);
-  cy.findByLabelText("Description").type(editedFood.description);
-  cy.findByLabelText("Price").type(editedFood.price.toString());
+  cy.findByLabelText("Name").clear().type(editedFood.name);
+  cy.findByLabelText("Description").clear().type(editedFood.description);
+  cy.findByLabelText("Price").clear().type(editedFood.price.toString());
   cy.findByRole("button", { name: "Save Food" }).click();
 
   // Upon save, we should be on the menu page. Assure the URL is correct.
