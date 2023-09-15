@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Heading } from "./shared/Heading";
-import { NewFood } from "./foods.types";
+import { Food, NewFood } from "./foods.types";
 import { Input } from "./shared/Input";
-import { addFood, getFood } from "./api/foods.service";
+import { addFood, editFood, getFood } from "./api/foods.service";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import { z } from "zod";
@@ -26,7 +26,7 @@ const foodFormSchema = z.object({
 type Status = "idle" | "submitting" | "submitted";
 
 export function Admin() {
-  const [food, setFood] = useState(newFood);
+  const [food, setFood] = useState<NewFood | Food>(newFood);
   const [status, setStatus] = useState<Status>("idle");
 
   const navigate = useNavigate();
@@ -81,7 +81,10 @@ export function Admin() {
       toast.error("Invalid input");
       return;
     }
-    await addFood(food);
+
+    // Narrow the type by checking for the presence of an id property
+    "id" in food ? await editFood(food) : await addFood(food);
+
     toast.success("Food added!");
     navigate("/");
   }

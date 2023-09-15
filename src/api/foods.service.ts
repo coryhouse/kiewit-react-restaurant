@@ -25,6 +25,13 @@ export async function addFood(newFood: NewFood): Promise<Food> {
   return food as Food;
 }
 
+export async function editFood(food: Food): Promise<Food> {
+  const savedFood = await ky
+    .put("http://localhost:3001/foods/" + food.id, { json: food })
+    .json();
+  return savedFood as Food;
+}
+
 export async function deleteFood(foodId: number): Promise<void> {
   await ky.delete("http://localhost:3001/foods/" + foodId);
 }
